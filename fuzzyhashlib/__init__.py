@@ -1,5 +1,6 @@
 import libssdeep_wrapper
 
+
 """Wrapper for various fuzzy hashing libraries which attempts to be as similar
 in interface to hashlib as possible.
 
