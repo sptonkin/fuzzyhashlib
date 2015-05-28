@@ -81,7 +81,6 @@ class SsdeepError(Exception):
     """Base exception class for SSDeep errors."""
     pass
 
-
 #fuzzy_new C API (from fuzzy.h)
 #extern /*@only@*/ /*@null@*/ struct fuzzy_state *fuzzy_new(void);
 libssdeep.fuzzy_new.restype = c_void_p
@@ -141,45 +140,9 @@ def fuzzy_digest(state, flags):
 #extern int fuzzy_compare(const char *sig1, const char *sig2);
 #libssdeep.fuzzy_compare.restype = c_int
 #libssdeep.fuzzy_compare.argtypes = [c_char_p, c_char_p]
-#def compare(sig1, sig2):
-#    """Computes the match score between the two two passed fuzzy hashes.
-#    This will be an integer score between 0 and 100.
-#
-#    Note: This function wraps ssdeep's fuzzy_compare function."""
-#    return libssdeep.fuzzy_compare(sig1, sig2)
+def compare(sig1, sig2):
+    """Computes the match score between the two two passed fuzzy hashes.
+    This will be an integer score between 0 and 100.
 
-#fuzzy_hash_filename C API (from fuzzy.h)
-#extern int fuzzy_hash_filename(const char * filename, char * result);
-#libssdeep.fuzzy_hash_filename.restype = c_int
-#libssdeep.fuzzy_hash_filename.argtypes = [c_char_p, c_char_p]
-#def hash_filename(filename):
-#    """Computes the CTPH for the passed filename. Returns a tuple containing
-#    (success_int, fuzzy_hash), where:
-#        success_int = zero on success, non-zero on error
-#        fuzzy_hash = resultant fuzzy hash of the specified file
-#
-#    Note: This function wraps ssdeep's fuzzy_hash_filename function, but
-#    implements a more Pythonic interface."""
-#    resbuf = create_string_buffer('\x00' * FUZZY_MAX_RESULT)
-#    success_int = libssdeep.fuzzy_hash_filename(filename, resbuf)
-#    return success_int, resbuf.value
-
-#fuzzy_hash_buf C API (from fuzzy.h)
-#extern int fuzzy_hash_buf(const unsigned char *buf,
-#                        uint32_t      buf_len,
-#                        char          *result);
-#libssdeep.fuzzy_hash_buf.restype = c_int
-#libssdeep.fuzzy_hash_buf.argtypes = [c_char_p, c_int, c_char_p]
-#def hash(buf):
-#    """Computes the CTPH for the passed buffer. Returns a tuple containing
-#    (success_int, fuzzy_hash), where:
-#        success_int = zero on success, non-zero on error
-#        fuzzy_hash = resultant fuzzy hash of the buffer
-#
-#    Note: This function wraps ssdeep's fuzzy_hash_buf function, but
-#    implements a more Pythonic interface."""
-#    inbuf = create_string_buffer(buf)
-#    resbuf = create_string_buffer('\x00' * FUZZY_MAX_RESULT)
-#    buf_len = len(buf)
-#    success_int = libssdeep.fuzzy_hash_buf(inbuf, buf_len, resbuf)
-#    return success_int, resbuf.value
+    Note: This function wraps ssdeep's fuzzy_compare function."""
+    return libssdeep.fuzzy_compare(sig1, sig2)

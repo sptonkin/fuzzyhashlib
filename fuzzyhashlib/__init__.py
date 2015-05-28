@@ -12,8 +12,6 @@ to minimise extenal dependencies.
 
 [sptonkin@outlook.com]"""
 
-class SsdeepError(Exception):
-    pass
 
 class ssdeep:
     """A ssdeep represents ssdeep's computed fuzzy hash of a string of
@@ -28,7 +26,15 @@ class ssdeep:
     Attributes:
 
     name -- the name of the alogorthm being used (ie. "ssdeep")
-    digest_size -- the maximum size in bytes"""
+    digest_size -- the maximum size in bytes
+    
+    Operators:
+        
+    __sub__ -- ssdeep objects can have hashes compared with subtraction (-)
+    __eq__ -- ssdeep objects can be tested for hash equivalency (==)"""
+
+    name = "ssdeep"
+    digest_size = libssdeep_wrapper.FUZZY_MAX_RESULT
 
     def __init__(self, buf=None):
         """Returns ssdeep hash obj, optionally initialised with with buf."""
@@ -52,12 +58,16 @@ class ssdeep:
     def copy(self):
         """Returns a new fuzzy instance which should be identical to this
         instance."""
-        raise NotImplementedError("todo - implement this")
+        temp = ssdeep()
+        temp.name = self.name
+        temp.digest_size = self.digest_size
+        libssdeep_wrapper.fuzzy_free(temp._state)
+        temp._state = libssdeep_wrapper.fuzzy_clone(self._state)
+        return temp
 
     def __sub__(self, b):
-        a = self.hexdigest()
-        return libssdeep_wrapper.compare(a, b.hexdigest())
+        return libssdeep_wrapper.compare(self.hexdigest(), b.hexdigest())
 
     def __eq__(self, b):
-        a = self.hexdigest()
-        return libssdeep_wrapper.compare(a, b.hexdigest()) == 100
+        return \
+            libssdeep_wrapper.compare(self.hexdigest(), b.hexdigest()) == 100
