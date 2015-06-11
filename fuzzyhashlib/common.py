@@ -39,12 +39,12 @@ def find_library(library_name):
 
 def load_library(library_path):
     #FIXME - remove the following line.
-    print("common.load_library: loading %s" % library_path)
+    #print("common.load_library: loading %s" % library_path)
 
     try:
         library = ctypes.cdll.LoadLibrary(library_path)
     except Exception as err:
-        print("Failed to import '%s'" % library_path)
+        print("Failed to import '%s'" % library_path, file=sys.stderr)
         raise
 
     return library

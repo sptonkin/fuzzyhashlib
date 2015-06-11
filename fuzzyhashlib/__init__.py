@@ -87,10 +87,8 @@ class sdhash(object):
 
     def __init__(self, buf=None, hash=None):
         if buf is not None:
-            print("creating from buf")
             self._sdbf = sdhash_wrapper.sdbf_from_buffer(buf)
         elif hash is not None:
-            print("creating from hash")
             self._sdbf = sdhash_wrapper.sdbf_from_hash(hash)
         else:
             raise ValueError("One of buf or hash must be set.")

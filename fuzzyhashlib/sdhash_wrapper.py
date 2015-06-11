@@ -14,13 +14,10 @@ importing).
 [sptonkin@outlook.com]
 """
 
-# Load libsdhash
+# Load library
 sdbf_library_path = find_library("_sdbf_class")
-print(sdbf_library_path)
-print("Exists? %s" % os.path.exists(sdbf_library_path))
 sys.path.append(os.path.dirname(sdbf_library_path))
 import sdbf_class
-print("Imported!")
 
 
 class SdbfError(Exception):
@@ -29,11 +26,13 @@ class SdbfError(Exception):
 
 
 def sdbf_from_buffer(buf, name=None):
-    if len(buf) < 512:
-        raise ValueError("Buffer must be > 512 bytes in size.")
-    if name is None:
-        name = hashlib.sha1(buf).hexdigest()
-    print("name: %s (%s)" % (name, type(name)))
+    #TODO - see if you can restore name to this. not needed for initial cut.
+    #if len(buf) < 512:
+    #    raise ValueError("Buffer must be > 512 bytes in size.")
+    #if name is None:
+    #    name = hashlib.sha1(buf).hexdigest()
+    #print("name: %s (%s)" % (name, type(name)))
+    name = ""
     return sdbf_class.sdbf(name, buf, 0, len(buf), None)
 
 
