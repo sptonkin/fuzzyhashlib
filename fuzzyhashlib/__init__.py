@@ -1,4 +1,5 @@
 import libssdeep_wrapper
+import sdhash_wrapper
 
 
 """Wrapper for various fuzzy hashing libraries which attempts to be as similar
@@ -14,7 +15,13 @@ to minimise extenal dependencies.
 [sptonkin@outlook.com]"""
 
 
-class ssdeep:
+class UnsupportedOperation(Exception):
+    """Raised when a fuzzy hashing algorithm does not support the called
+    operation."""
+    pass
+
+
+class ssdeep(object):
     """A ssdeep represents ssdeep's computed fuzzy hash of a string of
     information.
 
@@ -72,3 +79,37 @@ class ssdeep:
     def __eq__(self, b):
         return \
             libssdeep_wrapper.compare(self.hexdigest(), b.hexdigest()) == 100
+
+
+
+class sdhash(object):
+    name = "sdhash"
+
+    def __init__(self, buf=None, hash=None):
+        if buf is not None:
+            print("creating from buf")
+            self._sdbf = sdhash_wrapper.sdbf_from_buffer(buf)
+        elif hash is not None:
+            print("creating from hash")
+            self._sdbf = sdhash_wrapper.sdbf_from_hash(hash)
+        else:
+            raise ValueError("One of buf or hash must be set.")
+
+    def __del__(self):
+       del self._sdbf 
+
+    def hexdigest(self):
+        return self._sdbf.to_string()
+
+    def copy(self):
+        return sdhash(hash=self.hexdigest())
+
+    def update(self, *args):
+        raise Exception("Update not supported for sdbf.")
+
+    def __sub__(self, b):
+        #TODO - figure out what the 0 at the end of this means.
+        return self._sdbf.compare(b._sdbf, 0)
+
+    def __eq__(self, b):
+        return self._sdbf.compare(b._sdbf, 0) == 100

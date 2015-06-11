@@ -1,23 +1,25 @@
 import unittest
 
 import fuzzyhashlib
-from fuzzyhashlib import libssdeep_wrapper
-from fuzzyhashlib.libssdeep_wrapper import libssdeep_path
+from fuzzyhashlib import sdhash_wrapper
+from fuzzyhashlib.sdhash_wrapper import sdbf_library_path
 
-class TestSsdeep(unittest.TestCase):
-    """Test fuzzyhashlib.ssdeep"""
+class TestSdhash(unittest.TestCase):
+    """Test fuzzyhashlib.sdhash"""
 
-    def test_ssdeep(self):
+    def test_sdhash(self):
         # Get the hash of the library being used
-        f1 = fuzzyhashlib.ssdeep(open(libssdeep_path, "rb").read())
+        f1 = fuzzyhashlib.sdhash(open(sdbf_library_path, "rb").read())
         h1 = f1.hexdigest()
+        print("\nh1: %s" % h1)
 
         # Get the hash of something else
-        f2 = fuzzyhashlib.ssdeep(open(__file__, "r").read())
+        f2 = fuzzyhashlib.sdhash(open(__file__, "r").read())
         h2 = f2.hexdigest()
+        print("\nh2: %s" % h2)
 
         # Start comparing things
-        self.assertEqual(f1.name, "ssdeep")
+        self.assertEqual(f1.name, "sdhash")
         self.assertNotEqual(h1, h2)
         self.assertNotEqual(f1 - f2, 100)
         self.assertEqual(f1 - f2, f2 - f1, msg="commutative test failed")
@@ -28,7 +30,8 @@ class TestSsdeep(unittest.TestCase):
 
         # Test copy()
         f3 = f1.copy()
-        h3 = f1.hexdigest()
+        h3 = f3.hexdigest()
+        print("\nh3: %s" % h3)
         self.assertEqual(h1, h3)
         self.assertTrue(f1 == f3)
         self.assertEqual(f1, f1)

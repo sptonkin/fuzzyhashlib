@@ -5,71 +5,17 @@ import platform
 import ctypes
 from ctypes import *
 
+from common import find_library, load_library, tobyte, frombyte
+
 """
 A ctypes wrapper for ssdeep version 2.9
 
 [sptonkin@outlook.com]
 """
 
-# Thanks to Michael Dorman (mjdorma@gmail.com) for handy 2-3 string converters.
-# Convert unicode to ascii if we're in 3x.
-if sys.version_info[0] < 3: #major
-    def tobyte(s):
-        return s
-else:
-    def tobyte(s):
-        if type(s) is bytes:
-            return s
-        else:
-            return s.encode('utf-8', errors='ignore')
-
-if sys.version_info[0] < 3: #major
-    def frombyte(s):
-        return s
-else:
-    def frombyte(s):
-        if type(s) is bytes:
-            return str(s.decode(encoding='utf-8', errors='ignore'))
-        else:
-             return s
-
-
-#ensure we can find our ssdeep binary
-if sys.platform == 'win32':
-    dllpath = os.path.join(sys.prefix, 'DLLs')
-    library = os.path.join(dllpath, 'libssdeep.dll')
-else:
-    dllpath = os.path.join(sys.prefix, 'lib')
-    library = os.path.join(dllpath, 'libssdeep.so')
-
-#FIXME - this should be changed
-if platform.architecture()[0].startswith("64"):
-    arch = "x86_64"
-else:
-    arch = "x86_32"
-
-#figure out OS path
-if sys.platform.startswith("linux"):
-    platform = "linux"
-elif sys.platform.startswith("darwin"):
-    platform = "dawin"
-elif sys.platform.startswith("win"):
-    platform = "windows"
-else:
-    raise Exception("Unsupported platform - %s" % sys.platform)
-
-library = os.path.join(os.path.dirname(__file__),
-                        "..", "libs", platform, arch, "libssdeep.so")
-
-tmp = os.environ['PATH']
-os.environ['PATH'] += ";%s" % dllpath
-try:
-    libssdeep = cdll.LoadLibrary(library)
-except Exception as err:
-    print("Failed to import '%s'" % library)
-    print("PATH = %s" % os.environ['PATH'])
-    raise
-os.environ['PATH'] = tmp
+# Load libssdeep
+libssdeep_path = find_library("libssdeep")
+libssdeep = load_library(libssdeep_path)
 
 #defines (from fuzzy.h)
 SPAMSUM_LENGTH = 64
@@ -81,6 +27,7 @@ class SsdeepError(Exception):
     """Base exception class for SSDeep errors."""
     pass
 
+
 #fuzzy_new C API (from fuzzy.h)
 #extern /*@only@*/ /*@null@*/ struct fuzzy_state *fuzzy_new(void);
 libssdeep.fuzzy_new.restype = c_void_p
@@ -90,6 +37,7 @@ def fuzzy_new():
         raise SsdeepError("Could not create fuzzy_state")
     return result
 
+
 #fuzzy_clone C API (from fuzzy.h)
 #extern /*@only@*/ /*@null@*/ struct fuzzy_state *fuzzy_clone(const struct fuzzy_state *state);
 libssdeep.fuzzy_clone.restype = c_void_p
@@ -97,11 +45,13 @@ libssdeep.fuzzy_clone.argtypes = [c_void_p]
 def fuzzy_clone(state):
     return libssdeep.fuzzy_clone(state)
 
+
 #fuzzy_free C API (from fuzzy.h)
 #extern void fuzzy_free(/*@only@*/ struct fuzzy_state *state);
 libssdeep.fuzzy_clone.argtypes = [c_void_p]
 def fuzzy_free(state):
     libssdeep.fuzzy_free(state)
+
 
 #fuzzy_update C API (from fuzzy.h)
 #extern int fuzzy_update(struct fuzzy_state *state,
@@ -113,6 +63,7 @@ def fuzzy_update(state, buf):
     ret_code = libssdeep.fuzzy_update(state, tobyte(buf), len(buf))
     if ret_code != 0:
         raise SsdeepError("Could not update digest from passed buf.")
+
 
 #fuzzy_digest C API (from fuzzy.h)
 #extern int fuzzy_digest(const struct fuzzy_state *state,

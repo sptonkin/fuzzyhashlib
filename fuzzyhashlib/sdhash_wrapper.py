@@ -1,0 +1,41 @@
+from __future__ import print_function
+import sys
+import os
+import platform
+import hashlib
+
+from common import find_library, load_library, tobyte, frombyte
+
+"""
+Shim between fuzzyhashlib code and sdhash's existing sdbf_class module (which
+imports from _sdbf_class.so, which needs to be added to the path for 
+importing).
+
+[sptonkin@outlook.com]
+"""
+
+# Load libsdhash
+sdbf_library_path = find_library("_sdbf_class")
+print(sdbf_library_path)
+print("Exists? %s" % os.path.exists(sdbf_library_path))
+sys.path.append(os.path.dirname(sdbf_library_path))
+import sdbf_class
+print("Imported!")
+
+
+class SdbfError(Exception):
+    """Base exception for SDBF hash errors."""
+    pass
+
+
+def sdbf_from_buffer(buf, name=None):
+    if len(buf) < 512:
+        raise ValueError("Buffer must be > 512 bytes in size.")
+    if name is None:
+        name = hashlib.sha1(buf).hexdigest()
+    print("name: %s (%s)" % (name, type(name)))
+    return sdbf_class.sdbf(name, buf, 0, len(buf), None)
+
+
+def sdbf_from_hash(sdhash):
+    return sdbf_class.sdbf(sdhash)
