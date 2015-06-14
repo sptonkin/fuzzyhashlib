@@ -1,21 +1,21 @@
    fuzzyhashlib
    Copyright 2015 Stephen Tonkin
 
-   This library provides interfaces to the open source software:
+   This library provides interfaces with the follwoing open source 
+   software:
    * ssdeep
    * sdhash
 
    ssdeep was written by Jesse Kornblum of the ManTech International
    Corporation, with acknowledged contributions by Jason Sherman and
    testing by the Computer Science Department at the University of
-   Iowa. Compiled libraries are installed as part of this package,
-   with the libraries built from unmodified ssdeep source, version
-   2.13. The original source code for this version of ssdeep is
-   available from
+   Iowa. Compiled libraries built from unmodified ssdeep source,
+   version 2.13, are installed as part of this package. The original
+   source code for this version of ssdeep available from:
       http://downloads.sourceforge.net/project/ssdeep/ssdeep-2.13/ssdeep-2.13.tar.gz
 
    sdhash was written by Vassil Roussev and Candice Quates. Compiled
-   libraries are installed as part of this package, with the
-   libraries built from unmodified sdhash source, version 3.4. The
-   original source code for this version of sdhash is available from
+   libraries built from unmodified sdhash source, version 3.4, are
+   installed are installed as part of this package. The original
+   source code for this version of sdhash is available from:
       http://github.com/sdhash/sdhash
