@@ -46,7 +46,7 @@ else:
     ext = '.so'
 
 data_files = []
-for l in ["libssdeep"]:
+for l in ["libssdeep", "_sdbf_class"]:
     fuzzyhashlib_path = os.path.join('.', 'libs', system, machine, l + ext)
 
     if os.path.exists(fuzzyhashlib_path):
@@ -66,7 +66,7 @@ setup(
     author_email="sptonkin@outlook.com",
     #TODO - get a URI for this project.
     url="TODO - URI to project page.",
-    description="One-stop, ctypes-based library for all your fuzzy hash needs",
+    description="One-stop library for all your fuzzy hash needs",
     long_description=open('README.rst').read(),
     license="Apache Software Licence",
     install_requires = [],
@@ -98,6 +98,6 @@ setup(
 )
 
 if not data_files:
-    print("\nWARNING: Could not find %s" % libfuzzyhashlib_path)
+    print("\nWARNING: Could not find %s" % fuzzyhashlib_path)
     print("fuzzyhashlib may be unsupported on your system.")
     print("See http://pythonhosted.org/fuzzyhashlib/ for help")

@@ -81,7 +81,6 @@ class ssdeep(object):
             libssdeep_wrapper.compare(self.hexdigest(), b.hexdigest()) == 100
 
 
-
 class sdhash(object):
     name = "sdhash"
 

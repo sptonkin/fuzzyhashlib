@@ -23,18 +23,21 @@ def find_library(library_name):
     if sys.platform.startswith("linux"):
         os_platform = "linux"
         extension = "so"
+        libdir = "lib"
     elif sys.platform.startswith("darwin"):
         os_platform = "dawin"
         extension = "dylib"
+        libdir = "lib"
     elif sys.platform.startswith("win"):
         os_platform = "windows"
         extension = "dll"
+        libdir = "DLLs"
     else:
         raise Exception("Unsupported platform - %s" % sys.platform)
 
     library_filename = "%s.%s" % (library_name, extension)
-    return os.path.join(os.path.dirname(__file__),
-                            "..", "libs", os_platform, arch, library_filename)
+    library_path = os.path.join(sys.prefix, libdir, library_filename)
+    return library_path
 
 
 def load_library(library_path):
