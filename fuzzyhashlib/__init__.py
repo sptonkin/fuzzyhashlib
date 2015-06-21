@@ -1,3 +1,5 @@
+from __future__ import print_function
+import inspect
 import libssdeep_wrapper
 import sdhash_wrapper
 
@@ -69,7 +71,13 @@ class ssdeep(object):
             raise ValueError("one of buf or hash must be set")
             
     def __del__(self):
-        libssdeep_wrapper.fuzzy_free(self._state)
+        try:
+            libssdeep_wrapper.fuzzy_free(self._state)
+        except AttributeError:
+            # On Python shutdown it seems like libssdeep_wrapper may get
+            # freed first, it seems?
+            #print("?", end="")
+            pass
 
     def hexdigest(self):
         """Return the digest value as a string of hexadecimal digits."""
