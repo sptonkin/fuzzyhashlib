@@ -5,7 +5,7 @@ import resource
 import fuzzyhashlib
 
 class BaseFuzzyHashTest(unittest.TestCase):
-    """Test fuzzyhashlib.ssdeep"""
+    """Base fuzzyhashlib test class."""
 
     FUZZY_HASH_CLASS = None
     TEST_DATA_PATH = None
@@ -46,8 +46,9 @@ class BaseFuzzyHashTest(unittest.TestCase):
                          msg="commutative test failed")
         self.assertEqual(self.h1, self.h1)
         self.assertEqual(self.h2, self.h2)
-        self.assertEqual(self.h1 - self.h1, 100)
-        self.assertEqual(self.h2 - self.h2, 100)
+        msg = "(%s) comparing self to self did not score 100" % self.h1.name
+        self.assertEqual(self.h1 - self.h1, 100, msg=msg)
+        self.assertEqual(self.h2 - self.h2, 100, msg=msg)
 
     def test_copy(self):
         h3 = self.h1.copy()
