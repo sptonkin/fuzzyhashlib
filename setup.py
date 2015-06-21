@@ -1,20 +1,10 @@
 #!/usr/bin/env python
-#from distribute_setup import use_setuptools
-#use_setuptools()
 from setuptools import setup
 
 import re
 import platform
 import os
 import sys
-
-
-if 'test' in sys.argv:
-    # Setup test unloads modules after the tests have completed. This causes an
-    # error in atexit's exit calls because the registered modules no longer
-    # exist.  This hack resolves this issue by disabling the register func
-    import atexit
-    atexit.register = lambda be_gone_nasty_traceback: True
 
 
 def load_version(filename='fuzzyhashlib/version.py'):
@@ -29,7 +19,7 @@ def load_version(filename='fuzzyhashlib/version.py'):
         return version
 
 
-#see if we have a pre-built libfuzzyhashlib for this platform
+# See if we have a pre-built libfuzzyhashlib for this platform.
 arch, exetype = platform.architecture()
 system = platform.system().lower()
 machine = platform.machine().lower()
@@ -70,12 +60,6 @@ setup(
     long_description=open('README.rst').read(),
     license="Apache Software Licence",
     install_requires = [],
-    #TODO - does this need a CLI?
-    #entry_points={
-    #    'console_scripts': [
-    #        'fuzzyhashlib-ctypes = fuzzyhashlib.cli:entry'
-    #        ]
-    #},
     #TODO - initial version will only support linux. others aspirational?
     platforms=['linux'],
     classifiers=[
