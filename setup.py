@@ -69,7 +69,6 @@ setup(
         #'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX :: Linux',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.2',
@@ -84,4 +83,3 @@ setup(
 if not data_files:
     print("\nWARNING: Could not find %s" % fuzzyhashlib_path)
     print("fuzzyhashlib may be unsupported on your system.")
-    print("See http://pythonhosted.org/fuzzyhashlib/ for help")

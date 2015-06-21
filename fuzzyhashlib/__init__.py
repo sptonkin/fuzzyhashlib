@@ -15,20 +15,21 @@ to minimise extenal dependencies.
 [sptonkin@outlook.com]"""
 
 
-class UnsupportedOperation(Exception):
-    """Raised when a fuzzy hashing algorithm does not support the called
-    operation."""
-    pass
-
-
 class InvalidOperation(Exception):
-    """Raised when the use of a fuzzyhashlib object is incorrect."""
+    """Raised when the use of a fuzzyhashlib object is incorrect or
+    unsupported."""
     pass
 
 
 class ssdeep(object):
     """A ssdeep represents ssdeep's computed fuzzy hash of a string of
     information.
+    
+    ssdeep objects can be created either with a buffer or with a 
+    previously computed hexdigest, although it should be noted that
+    objects created with a previously computed hash cannoy be updated
+    with calls to their .update() method. Doing so will result in an
+    InvalidOperation exception.
 
     Methods:
     
@@ -43,14 +44,17 @@ class ssdeep(object):
     
     Operators:
         
-    __sub__ -- ssdeep objects can have hashes compared with subtraction (-)
-    __eq__ -- ssdeep objects can be tested for hash equivalency (==)"""
+    __sub__ -- instances can have hashes compared with subtraction (-)
+    __eq__ -- instances can be tested for hash equivalency (==)"""
 
     name = "ssdeep"
     digest_size = libssdeep_wrapper.FUZZY_MAX_RESULT
 
     def __init__(self, buf=None, hash=None):
-        """Returns ssdeep hash obj, optionally initialised with with buf."""
+        """Initialises a ssdeep object. Can be initialised with either a
+        a buffer through the use of the keyword argument 'buf' or a
+        previously computed ssdeep hash using the keyword agument ('hash').
+        Note that only objects initialised using a buffer can be updated."""
         self.name = "ssdeep"
         self.digest_size = libssdeep_wrapper.FUZZY_MAX_RESULT
         self._state = libssdeep_wrapper.fuzzy_new()
@@ -79,11 +83,10 @@ class ssdeep(object):
         if self._updatable:
             return libssdeep_wrapper.fuzzy_update(self._state, buf)
         else:
-            raise InvalidOperation("cannot update non-updatable ssdeep object")
+            raise InvalidOperation("cannot update sdeep created from hash")
 
     def copy(self):
-        """Returns a new fuzzy instance which should be identical to this
-        instance."""
+        """Returns a new instance which identical to this instance."""
         if self._pre_computed_hash is None:
             temp = ssdeep(buf="")
         else:
@@ -103,9 +106,35 @@ class ssdeep(object):
 
 
 class sdhash(object):
+    """A sdhash represents sdhash's computed fuzzy hash of a string of
+    information.
+
+    sdhash objects can be created either with a buffer or with a 
+    previously computed hexdigest. sdhash objects cannot be updated
+    with calls to .update() method. Doing so will result in an
+    InvalidOperation exception.
+
+    Methods:
+    
+    hexdigest() -- return the current digest as a string of hex digits
+    copy() -  returns a copy of the current hash object
+
+    Attributes:
+
+    name -- the name of the alogorthm being used (ie. "sdhash")
+    
+    Operators:
+        
+    __sub__ -- instances can have hashes compared with subtraction (-)
+    __eq__ -- instances can be tested for hash equivalency (==)"""
+
     name = "sdhash"
 
     def __init__(self, buf=None, hash=None):
+        """Initialises a ssdeep object. Can be initialised with either a
+        a buffer through the use of the keyword argument 'buf' or a
+        previously computed ssdeep hash using the keyword agument ('hash').
+        Note that sdhash objects cannot be updated()"""
         if buf is not None:
             self._sdbf = sdhash_wrapper.sdbf_from_buffer(buf)
         elif hash is not None:
@@ -117,16 +146,18 @@ class sdhash(object):
        del self._sdbf 
 
     def hexdigest(self):
+        """Return the digest value as a string of hexadecimal digits."""
         return self._sdbf.to_string()
 
     def copy(self):
+        """Returns a new instance which identical to this instance."""
         return sdhash(hash=self.hexdigest())
 
     def update(self, *args):
-        raise Exception("Update not supported for sdbf.")
+        """Not supported."""
+        raise InvalidOperation("update() not supported for sdhash.")
 
     def __sub__(self, b):
-        #TODO - figure out what the 0 at the end of this means.
         score = self._sdbf.compare(b._sdbf, 0)
         #print("SDHASH\n%s - %s = %d" % \
         #        (self.hexdigest()[:32], b.hexdigest()[:32], score))

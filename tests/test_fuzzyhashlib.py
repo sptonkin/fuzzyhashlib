@@ -63,6 +63,14 @@ class BaseFuzzyHashTest(unittest.TestCase):
         self.h1.update(self.test_data_2)
         self.assertNotEqual(self.d1, self.h1.hexdigest())
 
+    def test_create_from_hash(self):
+        h3 = self.FUZZY_HASH_CLASS(hash=self.h1.hexdigest())
+        self.assertEquals(h3, self.h1)
+
+        # So far all algorithms created from hashes cannot be updated. Test.
+        with self.assertRaises(fuzzyhashlib.InvalidOperation) as exc:
+            h3.update("this should error")
+
     def test_leak(self):
         initial = resource.getrusage(resource.RUSAGE_SELF)[2]
         for x in xrange(0, 1000):
@@ -73,7 +81,6 @@ class BaseFuzzyHashTest(unittest.TestCase):
             self.assertEquals(current, initial,
                 "memory usage increased after %d iterations (%s)" % \
                 (x, self.h1.name))
-
 
 
 class TestSsdeep(BaseFuzzyHashTest):
@@ -94,4 +101,4 @@ class TestSdhash(BaseFuzzyHashTest):
         with self.assertRaises(Exception) as context:
             self.h1.update(self.test_data_2)
         self.assertEquals(context.exception.message,
-                          "Update not supported for sdbf.")
+                          "update() not supported for sdhash.")
