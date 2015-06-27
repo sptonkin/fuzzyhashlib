@@ -56,7 +56,7 @@ setup(
     author_email="sptonkin@outlook.com",
     #TODO - get a URI for this project.
     url="TODO - URI to project page.",
-    description="One-stop library for all your fuzzy hash needs",
+    description="Hashlib-like wrapper for several fuzzy hash algorithms.",
     long_description=open('README.rst').read(),
     license="Apache Software Licence",
     install_requires = [],
