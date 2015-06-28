@@ -11,6 +11,7 @@ What if fuzzy hashing algorithms were usable through a common API,
 the same way that Python's hashlib exposes secure hash and message digest
 algorithms? This is the question fuzzyhashlib attempts to answer by providing
 a hashlib-like interface to:
+
 - ssdeep (via a Python ctypes wrapper)
 - sdbf (via sdhash's Python swig interface)
 
@@ -18,7 +19,12 @@ a hashlib-like interface to:
 Change Log
 ==========
 
+Version 0.0.2 - Initial version:
+
+-  libraries installed for x86-32 linux too
+
 Version 0.0.1 - Initial version:
+
 - ssdeep and sdhash wrapped with hashlib-like interfaces
 - libraries installed for x86-64 linux only
 
