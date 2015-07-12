@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import sys
 import os
 import platform
@@ -5,7 +6,7 @@ import platform
 import ctypes
 from ctypes import *
 
-from common import find_library, load_library, tobyte, frombyte
+from .common import find_library, load_library, tobyte, frombyte
 
 """
 A ctypes wrapper for ssdeep version 2.9

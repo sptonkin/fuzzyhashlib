@@ -1,7 +1,7 @@
-from __future__ import print_function
+from __future__ import print_function, absolute_import
 import inspect
-import libssdeep_wrapper
-import sdhash_wrapper
+from . import libssdeep_wrapper
+from . import sdhash_wrapper
 
 
 """Wrapper for various fuzzy hashing libraries which attempts to be as similar

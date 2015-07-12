@@ -4,7 +4,7 @@ import os
 import platform
 import hashlib
 
-from common import find_library, load_library, tobyte, frombyte
+from . common import find_library, load_library, tobyte, frombyte
 
 """
 Shim between fuzzyhashlib code and sdhash's existing sdbf_class module (which
@@ -17,7 +17,7 @@ importing).
 # Load library
 sdbf_library_path = find_library("_sdbf_class")
 sys.path.append(os.path.dirname(sdbf_library_path))
-import sdbf_class
+from . import sdbf_class
 
 
 class SdbfError(Exception):

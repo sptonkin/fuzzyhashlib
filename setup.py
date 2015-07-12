@@ -54,28 +54,23 @@ setup(
     zip_safe=False,
     author="Stephen Tonkin",
     author_email="sptonkin@outlook.com",
-    #TODO - get a URI for this project.
-    url="TODO - URI to project page.",
+    url="https://github.com/sptonkin/fuzzyhashlib",
     description="Hashlib-like wrapper for several fuzzy hash algorithms.",
     long_description=open('README.rst').read(),
     license="Apache Software Licence",
     install_requires = [],
-    #TODO - initial version will only support linux. others aspirational?
     platforms=['linux'],
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: Other Audience',
         'License :: OSI Approved :: Apache Software License',
         #'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX :: Linux',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.2',
-        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: Implementation :: CPython',
         'Topic :: Security',
-        'Topic :: System :: Monitoring'
+        'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     test_suite="tests"
 )

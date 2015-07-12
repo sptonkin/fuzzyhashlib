@@ -65,7 +65,7 @@ try:
     _object = object
     _newclass = 1
 except AttributeError:
-    class _object : pass
+    class _object(object) : pass
     _newclass = 0
 
 

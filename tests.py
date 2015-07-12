@@ -9,12 +9,20 @@ class BaseFuzzyHashTest(unittest.TestCase):
 
     FUZZY_HASH_CLASS = None
     TEST_DATA_PATH = None
+    KNOWN_RESULT = None
 
     @classmethod
     def setUpClass(cls):
         if cls is BaseFuzzyHashTest:
             raise unittest.SkipTest()
         super(BaseFuzzyHashTest, cls).setUpClass()
+
+    @property
+    def known_data(self):
+        dir_path = os.path.dirname(__file__)
+        data_path = os.path.join(dir_path, "LICENSE")
+        with open(data_path, "rb") as data_file:
+            return data_file.read()
     
     def setUp(self):
         # Ensure inheriting class specifies the class to test.
@@ -37,6 +45,11 @@ class BaseFuzzyHashTest(unittest.TestCase):
         self.d1 = self.h1.hexdigest()
         self.h2 = self.FUZZY_HASH_CLASS(self.test_data_2)
         self.d2 = self.h2.hexdigest()
+
+    def test_known_result(self):
+        computed = self.FUZZY_HASH_CLASS(self.known_data)
+        known = self.FUZZY_HASH_CLASS(hash=self.KNOWN_RESULT)
+        self.assertEquals(computed, known)
 
     def test_comparisons(self):
         # Start comparing things.
@@ -73,7 +86,7 @@ class BaseFuzzyHashTest(unittest.TestCase):
 
     def test_leak(self):
         initial = resource.getrusage(resource.RUSAGE_SELF)[2]
-        for x in xrange(0, 1000):
+        for x in range(0, 1000):
             # Compute hash for arbitrary data, check if more mem is used.
             self.h1 = self.FUZZY_HASH_CLASS(100000 * chr(x & 0xff))
             current = \
@@ -88,6 +101,8 @@ class TestSsdeep(BaseFuzzyHashTest):
 
     FUZZY_HASH_CLASS = fuzzyhashlib.ssdeep
     TEST_DATA_PATH = fuzzyhashlib.libssdeep_wrapper.libssdeep_path
+    KNOWN_RESULT = "192:nU6G5KXSD9VYUKhu1JVF9hFGvV/QiGkS594drFjuHYx5dvTrLh3k" \
+        "TSEn7HbHR:U9vlKM1zJlFvmNz5VrlkTS07Ht"
 
 
 class TestSdhash(BaseFuzzyHashTest):
@@ -95,6 +110,12 @@ class TestSdhash(BaseFuzzyHashTest):
 
     FUZZY_HASH_CLASS = fuzzyhashlib.sdhash
     TEST_DATA_PATH = fuzzyhashlib.sdhash_wrapper.sdbf_library_path
+    KNOWN_RESULT = "sdbf:03:0::11358:sha1:256:5:7ff:160:1:160:IoFBClI" \
+        "QqFAxCa4JCEns8ACBIAQ1UEwAAkUiSoDIEiyNm5QQCJQDhEGISPghTIDWVVaATIMjJC" \
+        "hQK4CkgSAgtGCEbIacfGUQgxygkgBEgaRBigAhCoCQO4ZGCEtuB8RgLuQKaAk2AgKA6" \
+        "SAQGCirEEa1doFBwTwyKiAxLEhRKHAYArAUgAkICheDgGY0QVtLKByAwQSQ4CoFAwBW" \
+        "eQHyCIqy4IiACikBBKsAAjXoGAhgFEgCpAzEjYYAFoZT0AAB4QEQCDQC0EoiCkpCUVI" \
+        "I33eqdIAJGioMmBXseEq9Wgg4MxhVNCIRPFMLH6pJyZgRDJDRKAIkcaBC4AEgjIjqAQ=="
 
     def test_update(self):
         # Override default to capture .update() being unsupported.
