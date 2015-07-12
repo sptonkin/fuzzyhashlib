@@ -15,6 +15,29 @@ a hashlib-like interface to:
 - ssdeep (via a Python ctypes wrapper)
 - sdbf (via sdhash's Python swig interface)
 
+Currently supported for Python 2.7 on 32- and 64-bit linux (Ubuntu 14.04). 
+
+
+Usage
+=====
+
+Example usage in iPython is provided below.
+
+::
+
+  In [1]: import fuzzyhashlib
+  
+  In [2]: fuzzyhashlib.ssdeep("a" * 1024).hexdigest()
+  Out[2]: '3:tj1:n'
+  
+  In [3]: fuzzyhashlib.sdhash("a" * 1024).hexdigest()
+  Out[3]: 'sdbf:03:0::1024:sha1:256:5:7ff:160:1:0:AAAAAAAAAAAAAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAA==\n'
+
 
 Change Log
 ==========
