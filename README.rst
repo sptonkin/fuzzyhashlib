@@ -42,7 +42,11 @@ Example usage in iPython is provided below.
 Change Log
 ==========
 
-Version 0.0.2 - Initial version:
+Version 0.0.3 - Imporoved packaging:
+
+-  libraries installed for x86-32 linux too
+
+Version 0.0.2 - 32-bit libraries for linux:
 
 -  libraries installed for x86-32 linux too
 
@@ -54,6 +58,8 @@ Version 0.0.1 - Initial version:
 
 License and Source Availability
 ===============================
+
+The fuzzyhashlib library and package is licensed under APLv2.
 
 The information in this section is also provided under fuzzyhashlib's source
 tree under 'NOTICES'.
