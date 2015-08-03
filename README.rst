@@ -42,9 +42,9 @@ Example usage in iPython is provided below.
 Change Log
 ==========
 
-Version 0.0.4 - Imporoved packaging:
+Version 0.0.5 - Imporoved packaging:
 
--  libraries installed for x86-32 linux too
+-  (and the versions in-between) fix packaging so libs install correctly
 
 Version 0.0.2 - 32-bit libraries for linux:
 
