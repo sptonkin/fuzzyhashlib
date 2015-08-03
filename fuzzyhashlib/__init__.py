@@ -56,7 +56,11 @@ class ssdeep(object):
         """Initialises a ssdeep object. Can be initialised with either a
         a buffer through the use of the keyword argument 'buf' or a
         previously computed ssdeep hash using the keyword agument ('hash').
-        Note that only objects initialised using a buffer can be updated."""
+        
+        Note that only objects initialised using a buffer can be updated.
+
+        Note that if both buf and hash parameters are provided on
+        initialisation, buf will be used and hash will be ignored."""
         self.name = "ssdeep"
         self.digest_size = libssdeep_wrapper.FUZZY_MAX_RESULT
         self._state = libssdeep_wrapper.fuzzy_new()
@@ -142,8 +146,14 @@ class sdhash(object):
         """Initialises a ssdeep object. Can be initialised with either a
         a buffer through the use of the keyword argument 'buf' or a
         previously computed ssdeep hash using the keyword agument ('hash').
-        Note that sdhash objects cannot be updated()"""
+
+        Note that sdhash objects do not support update().
+
+        Note that if both buf and hash parameters are provided on
+        initialisation, buf will be used and hash will be ignored."""
         if buf is not None:
+            if len(buf) < 512:
+                raise ValueError("sdhash requires buffer >= 512 in size")
             self._sdbf = sdhash_wrapper.sdbf_from_buffer(buf)
         elif hash is not None:
             self._sdbf = sdhash_wrapper.sdbf_from_hash(hash)
@@ -151,7 +161,8 @@ class sdhash(object):
             raise ValueError("One of buf or hash must be set.")
 
     def __del__(self):
-       del self._sdbf 
+        if hasattr(self, "_sdbf"):
+            del self._sdbf 
 
     def hexdigest(self):
         """Return the digest value as a string of hexadecimal digits."""

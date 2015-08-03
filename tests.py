@@ -117,6 +117,12 @@ class TestSdhash(BaseFuzzyHashTest):
         "eQHyCIqy4IiACikBBKsAAjXoGAhgFEgCpAzEjYYAFoZT0AAB4QEQCDQC0EoiCkpCUVI" \
         "I33eqdIAJGioMmBXseEq9Wgg4MxhVNCIRPFMLH6pJyZgRDJDRKAIkcaBC4AEgjIjqAQ=="
 
+    def test_invalid_buffer_size_raises(self):
+        with self.assertRaises(ValueError) as context:
+            fuzzyhashlib.sdhash("buffer_too_short")
+        self.assertEquals(context.exception.message,
+                          "sdhash requires buffer >= 512 in size")
+
     def test_update(self):
         # Override default to capture .update() being unsupported.
         with self.assertRaises(Exception) as context:

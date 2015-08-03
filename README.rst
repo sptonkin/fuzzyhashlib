@@ -42,6 +42,11 @@ Example usage in iPython is provided below.
 Change Log
 ==========
 
+Version 0.0.6 - Documentation and error handling:
+
+-  documentatino adds description of behaviour if buf and hash paramters are provided at initialisation
+-  sdhash class raises exception if provided buffer is < 512 bytes in size
+
 Version 0.0.5 - Imporoved packaging:
 
 -  (and the versions in-between) fix packaging so libs install correctly
