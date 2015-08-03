@@ -35,22 +35,20 @@ if system == 'windows':
 else:
     ext = '.so'
 
-data_files = []
-for l in ["libssdeep", "_sdbf_class"]:
-    fuzzyhashlib_path = os.path.join('.', 'libs', system, machine, l + ext)
-
-    if os.path.exists(fuzzyhashlib_path):
-        if system == 'windows':
-            install_libdir = os.path.join(sys.prefix, 'DLLs')
-        else:
-            install_libdir = os.path.join(sys.prefix, 'lib')
-        data_files.append((install_libdir, [fuzzyhashlib_path]))
+#build the yara package data (shipped yar files)
+package_data = []
+for path, _, files in os.walk(os.path.join('fuzzyhashlib', 'libs')):
+    rootpath = path[len('fuzzyhashlib') + 1:]
+    for f in files:
+        if f.endswith('.so') or f.endswith('.dll'):
+            package_data.append(os.path.join(rootpath, f))
 
 setup(
     name="fuzzyhashlib",
     version=load_version(),
     packages=['fuzzyhashlib'],
-    data_files=data_files,
+    #data_files=data_files,
+    package_data=dict(fuzzyhashlib=package_data),
     zip_safe=False,
     author="Stephen Tonkin",
     author_email="sptonkin@outlook.com",
@@ -75,6 +73,6 @@ setup(
     test_suite="tests"
 )
 
-if not data_files:
-    print("\nWARNING: Could not find %s" % fuzzyhashlib_path)
-    print("fuzzyhashlib may be unsupported on your system.")
+#if not data_files:
+#    print("\nWARNING: Could not find %s" % fuzzyhashlib_path)
+#    print("fuzzyhashlib may be unsupported on your system.")

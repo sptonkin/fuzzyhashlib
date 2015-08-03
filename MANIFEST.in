@@ -1,4 +1,3 @@
 include *.rst
-include distribute_setup.py
-recursive-include libs *.so
-#recursive-include libs *.dll
+recursive-include fuzzyhashlib *.so
+#recursive-include fuzzyhashlib *.dll
