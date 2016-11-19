@@ -1,5 +1,4 @@
 from __future__ import print_function, absolute_import
-import inspect
 from . import libssdeep_wrapper
 from . import sdhash_wrapper
 
@@ -29,7 +28,7 @@ class ssdeep(object):
     
     ssdeep objects can be created either with a buffer or with a 
     previously computed hexdigest, although it should be noted that
-    objects created with a previously computed hash cannoy be updated
+    objects created with a previously computed hash cannot be updated
     with calls to their .update() method. Doing so will result in an
     InvalidOperation exception.
 
@@ -41,7 +40,7 @@ class ssdeep(object):
 
     Attributes:
 
-    name -- the name of the alogorthm being used (ie. "ssdeep")
+    name -- the name of the algorithm being used (ie. "ssdeep")
     digest_size -- the maximum size in bytes
     
     Operators:
@@ -55,7 +54,7 @@ class ssdeep(object):
     def __init__(self, buf=None, hash=None):
         """Initialises a ssdeep object. Can be initialised with either a
         a buffer through the use of the keyword argument 'buf' or a
-        previously computed ssdeep hash using the keyword agument ('hash').
+        previously computed ssdeep hash using the keyword argument ('hash').
         
         Note that only objects initialised using a buffer can be updated.
 
@@ -80,7 +79,6 @@ class ssdeep(object):
         except AttributeError:
             # On Python shutdown it seems like libssdeep_wrapper may get
             # freed first, it seems?
-            #print("?", end="")
             pass
 
     def hexdigest(self):
@@ -95,7 +93,7 @@ class ssdeep(object):
         if self._updatable:
             return libssdeep_wrapper.fuzzy_update(self._state, buf)
         else:
-            raise InvalidOperation("cannot update sdeep created from hash")
+            raise InvalidOperation("Cannot update sdeep created from hash")
 
     def copy(self):
         """Returns a new instance which identical to this instance."""
@@ -172,17 +170,17 @@ class sdhash(object):
         """Returns a new instance which identical to this instance."""
         return sdhash(hash=self.hexdigest())
 
+    @staticmethod
     def update(self, *args):
         """Not supported."""
-        raise InvalidOperation("update() not supported for sdhash.")
+        raise InvalidOperation("Update() not supported for sdhash.")
 
     def __sub__(self, b):
         score = self._sdbf.compare(b._sdbf, 0)
-        #print("SDHASH\n%s - %s = %d" % \
-        #        (self.hexdigest()[:32], b.hexdigest()[:32], score))
         return score
 
     def __eq__(self, b):
+        # This comparison is more user friendly
         if isinstance(self, sdhash) and isinstance(b, sdhash):
             return self.hexdigest() == b.hexdigest()
         elif isinstance(self, sdhash) and isinstance(b, basestring):

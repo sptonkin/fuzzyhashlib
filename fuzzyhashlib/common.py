@@ -51,7 +51,7 @@ def load_library(library_path):
     return library
 
 
-if sys.version_info[0] < 3: #major 
+if sys.version_info[0] < 3:  # major
     def tobyte(s): 
         return s 
 else: 
@@ -62,7 +62,7 @@ else:
             return s.encode('utf-8', errors='ignore') 
  
 
-if sys.version_info[0] < 3: #major 
+if sys.version_info[0] < 3:  # major
     def frombyte(s): 
         return s 
 else: 
@@ -70,4 +70,4 @@ else:
         if type(s) is bytes: 
             return str(s.decode(encoding='utf-8', errors='ignore')) 
         else: 
-             return s 
+            return s

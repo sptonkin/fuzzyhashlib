@@ -1,10 +1,8 @@
 from __future__ import print_function
 import sys
 import os
-import platform
-import hashlib
 
-from . common import find_library, load_library, tobyte, frombyte
+from . common import find_library
 
 """
 Shim between fuzzyhashlib code and sdhash's existing sdbf_class module (which
