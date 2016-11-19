@@ -133,7 +133,7 @@ class sdhash(object):
 
     Attributes:
 
-    name -- the name of the alogorthm being used (ie. "sdhash")
+    name -- the name of the algorithm being used (ie. "sdhash")
     
     Operators:
         
@@ -143,9 +143,9 @@ class sdhash(object):
     name = "sdhash"
 
     def __init__(self, buf=None, hash=None):
-        """Initialises a ssdeep object. Can be initialised with either a
+        """Initialises a sdhash object. Can be initialised with either a
         a buffer through the use of the keyword argument 'buf' or a
-        previously computed ssdeep hash using the keyword agument ('hash').
+        previously computed sdhash hash using the keyword argument ('hash').
 
         Note that sdhash objects do not support update().
 
@@ -183,4 +183,12 @@ class sdhash(object):
         return score
 
     def __eq__(self, b):
-        return self._sdbf.compare(b._sdbf, 0) == 100
+        if isinstance(self, sdhash) and isinstance(b, sdhash):
+            return self.hexdigest() == b.hexdigest()
+        elif isinstance(self, sdhash) and isinstance(b, basestring):
+            return self.hexdigest() == b
+        else:
+            return False
+
+
+
