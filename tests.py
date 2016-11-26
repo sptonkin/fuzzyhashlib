@@ -52,16 +52,25 @@ class BaseFuzzyHashTest(unittest.TestCase):
         self.assertEquals(computed, known)
 
     def test_comparisons(self):
-        # Start comparing things.
         self.assertNotEqual(self.d1, self.d2)
         self.assertNotEqual(self.h1 - self.h2, 100)
         self.assertEqual(self.h1 - self.h2, self.h2 - self.h1,
                          msg="commutative test failed")
-        self.assertEqual(self.h1, self.h1)
-        self.assertEqual(self.h2, self.h2)
-        msg = "(%s) comparing self to self did not score 100" % self.h1.name
-        self.assertEqual(self.h1 - self.h1, 100, msg=msg)
-        self.assertEqual(self.h2 - self.h2, 100, msg=msg)
+        msg = "(%s) comparing self to self did not score 100"
+        self.assertEqual(self.h1 - self.h1, 100, msg=msg % self.h1.name)
+        self.assertEqual(self.h2 - self.h2, 100, msg=msg % self.h2.name)
+
+    def test_equalities(self):
+        # gclen's PR enables digest-to-object comparisons. Test combinations.
+        msg = "(%s) comparing self to self was not equal"
+        self.assertEqual(self.h1, self.h1, msg=msg % self.h1.name)
+        self.assertEqual(self.h1, self.d1, msg=msg % self.h1.name)
+        self.assertEqual(self.d1, self.h1, msg=msg % self.h1.name)
+        self.assertEqual(self.d1, self.d1, msg=msg % self.h1.name)
+        self.assertEqual(self.h2, self.h2, msg=msg % self.h2.name)
+        self.assertEqual(self.h2, self.d2, msg=msg % self.h2.name)
+        self.assertEqual(self.d2, self.h2, msg=msg % self.h2.name)
+        self.assertEqual(self.d2, self.d2, msg=msg % self.h2.name)
 
     def test_copy(self):
         h3 = self.h1.copy()

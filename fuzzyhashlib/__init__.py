@@ -111,8 +111,12 @@ class ssdeep(object):
         return libssdeep_wrapper.compare(self.hexdigest(), b.hexdigest())
 
     def __eq__(self, b):
-        return \
-            libssdeep_wrapper.compare(self.hexdigest(), b.hexdigest()) == 100
+        if isinstance(b, ssdeep):
+            return self.hexdigest() == b.hexdigest()
+        elif isinstance(b, basestring):
+            return self.hexdigest() == b
+        else:
+            return False
 
 
 class sdhash(object):
@@ -180,13 +184,9 @@ class sdhash(object):
         return score
 
     def __eq__(self, b):
-        # This comparison is more user friendly
-        if isinstance(self, sdhash) and isinstance(b, sdhash):
+        if isinstance(b, sdhash):
             return self.hexdigest() == b.hexdigest()
-        elif isinstance(self, sdhash) and isinstance(b, basestring):
+        elif isinstance(b, basestring):
             return self.hexdigest() == b
         else:
             return False
-
-
-
