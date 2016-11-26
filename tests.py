@@ -128,4 +128,4 @@ class TestSdhash(BaseFuzzyHashTest):
         with self.assertRaises(Exception) as context:
             self.h1.update(self.test_data_2)
         self.assertEquals(context.exception.message,
-                          "update() not supported for sdhash.")
+                          "sdhash does not support update()")

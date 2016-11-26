@@ -173,7 +173,7 @@ class sdhash(object):
     @staticmethod
     def update(self, *args):
         """Not supported."""
-        raise InvalidOperation("Update() not supported for sdhash.")
+        raise InvalidOperation("sdhash does not support update()")
 
     def __sub__(self, b):
         score = self._sdbf.compare(b._sdbf, 0)
