@@ -10,6 +10,8 @@ class BaseFuzzyHashTest(unittest.TestCase):
     FUZZY_HASH_CLASS = None
     TEST_DATA_PATH = None
     KNOWN_RESULT = None
+    MEM_LEAK_ITERATIONS = 1000
+    MEM_LEAK_TOLERANCE = 64
 
     @classmethod
     def setUpClass(cls):
@@ -42,9 +44,7 @@ class BaseFuzzyHashTest(unittest.TestCase):
 
         # Generate some test hash objects.
         self.h1 = self.FUZZY_HASH_CLASS(self.test_data_1)
-        self.d1 = self.h1.hexdigest()
         self.h2 = self.FUZZY_HASH_CLASS(self.test_data_2)
-        self.d2 = self.h2.hexdigest()
 
     def test_known_result(self):
         computed = self.FUZZY_HASH_CLASS(self.known_data)
@@ -52,7 +52,7 @@ class BaseFuzzyHashTest(unittest.TestCase):
         self.assertEquals(computed, known)
 
     def test_comparisons(self):
-        self.assertNotEqual(self.d1, self.d2)
+        self.assertNotEqual(self.h1.hexdigest(), self.h2.hexdigest())
         self.assertNotEqual(self.h1 - self.h2, 100)
         self.assertEqual(self.h1 - self.h2, self.h2 - self.h1,
                          msg="commutative test failed")
@@ -63,19 +63,34 @@ class BaseFuzzyHashTest(unittest.TestCase):
     def test_equalities(self):
         # gclen's PR enables digest-to-object comparisons. Test combinations.
         msg = "(%s) comparing self to self was not equal"
-        self.assertEqual(self.h1, self.h1, msg=msg % self.h1.name)
-        self.assertEqual(self.h1, self.d1, msg=msg % self.h1.name)
-        self.assertEqual(self.d1, self.h1, msg=msg % self.h1.name)
-        self.assertEqual(self.d1, self.d1, msg=msg % self.h1.name)
-        self.assertEqual(self.h2, self.h2, msg=msg % self.h2.name)
-        self.assertEqual(self.h2, self.d2, msg=msg % self.h2.name)
-        self.assertEqual(self.d2, self.h2, msg=msg % self.h2.name)
-        self.assertEqual(self.d2, self.d2, msg=msg % self.h2.name)
+        self.assertEqual(self.h1,
+                         self.h1,
+                         msg=msg % self.h1.name)
+        self.assertEqual(self.h1,
+                         self.h1.hexdigest(),
+                         msg=msg % self.h1.name)
+        self.assertEqual(self.h1.hexdigest(),
+                         self.h1,
+                         msg=msg % self.h1.name)
+        self.assertEqual(self.h1.hexdigest(),
+                         self.h1.hexdigest(),
+                         msg=msg % self.h1.name)
+        self.assertEqual(self.h2,
+                         self.h2,
+                         msg=msg % self.h2.name)
+        self.assertEqual(self.h2,
+                         self.h2.hexdigest(),
+                         msg=msg % self.h2.name)
+        self.assertEqual(self.h2.hexdigest(),
+                         self.h2,
+                         msg=msg % self.h2.name)
+        self.assertEqual(self.h2.hexdigest(),
+                         self.h2.hexdigest(),
+                         msg=msg % self.h2.name)
 
     def test_copy(self):
         h3 = self.h1.copy()
-        d3 = self.h1.hexdigest()
-        self.assertEqual(self.d1, d3)
+        self.assertEqual(self.h1.hexdigest(), h3.hexdigest())
         self.assertTrue(self.h1 == h3)
         self.assertEqual(self.h1, self.h1)
         self.assertEqual(self.h1 - h3, h3 - self.h1,
@@ -83,7 +98,7 @@ class BaseFuzzyHashTest(unittest.TestCase):
 
     def test_update(self):
         self.h1.update(self.test_data_2)
-        self.assertNotEqual(self.d1, self.h1.hexdigest())
+        self.assertNotEqual(self.h1, self.h1.hexdigest())
 
     def test_create_from_hash(self):
         h3 = self.FUZZY_HASH_CLASS(hash=self.h1.hexdigest())
@@ -95,14 +110,21 @@ class BaseFuzzyHashTest(unittest.TestCase):
 
     def test_leak(self):
         initial = resource.getrusage(resource.RUSAGE_SELF)[2]
-        for x in range(0, 1000):
+        threshold = initial + self.MEM_LEAK_TOLERANCE
+        x = 0
+        delta = 0
+        buf = 100000 * chr(x & 0xff)
+        while x < self.MEM_LEAK_ITERATIONS:
             # Compute hash for arbitrary data, check if more mem is used.
-            self.h1 = self.FUZZY_HASH_CLASS(100000 * chr(x & 0xff))
+            h1 = self.FUZZY_HASH_CLASS(buf)
             current = \
                 resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
-            self.assertEquals(current, initial,
-                "memory usage increased after %d iterations (%s)" % \
-                (x, self.h1.name))
+            delta = current - initial
+            self.assertLessEqual(current, threshold,
+                "memory usage increased %s after %d iterations (%s); "
+                "tolerance: %d" % \
+		    (delta, x, self.h1.name, self.MEM_LEAK_TOLERANCE))
+            x += 1
 
 
 class TestSsdeep(BaseFuzzyHashTest):
@@ -138,3 +160,20 @@ class TestSdhash(BaseFuzzyHashTest):
             self.h1.update(self.test_data_2)
         self.assertEquals(context.exception.message,
                           "sdhash does not support update()")
+
+class TestTlsh(BaseFuzzyHashTest):
+    """Test fuzzyhashlib.tlsh"""
+
+    FUZZY_HASH_CLASS = fuzzyhashlib.tlsh
+    TEST_DATA_PATH = fuzzyhashlib.tlsh_wrapper.tlsh_library_path
+    KNOWN_RESULT = \
+        "1632623FBA48037706C20162BB9764CBF2" \
+        "1E903F3B552568354CC1681F6BA6543FB6EA"
+    MEM_LEAK_ITERATIONS = 10000
+    MEM_LEAK_TOLERANCE = 1024
+
+    def test_invalid_buffer_size_raises(self):
+        with self.assertRaises(ValueError) as context:
+            fuzzyhashlib.tlsh("buffer_too_short").hexdigest()
+        self.assertTrue(
+            context.exception.message.startswith("tlsh requires buffer"))
