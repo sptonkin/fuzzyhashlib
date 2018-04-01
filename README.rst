@@ -14,8 +14,9 @@ a hashlib-like interface to:
 
 - ssdeep (via a Python ctypes wrapper)
 - sdbf (via sdhash's Python swig interface)
+- tlsh (via tlsh's Python C interface)
 
-Currently supported for Python 2.7 on 32- and 64-bit linux (Ubuntu 14.04). 
+Currently supported for Python 2.7 on 32- and 64-bit Ubuntu (Ubuntu 16.04). 
 
 
 Usage
@@ -42,9 +43,13 @@ Example usage in iPython is provided below.
 Change Log
 ==========
 
+Version 0.0.6 - Add support for tlsh:
+
+-  Adds support for tlsh
+
 Version 0.0.6 - Documentation and error handling:
 
--  documentatino adds description of behaviour if buf and hash paramters are provided at initialisation
+-  documentation adds description of behaviour if buf and hash paramters are provided at initialisation
 -  sdhash class raises exception if provided buffer is < 512 bytes in size
 
 Version 0.0.5 - Imporoved packaging:
@@ -67,7 +72,7 @@ License and Source Availability
 The fuzzyhashlib library and package is licensed under APLv2.
 
 The information in this section is also provided under fuzzyhashlib's source
-tree under 'NOTICES'.
+tree under 'NOTICE'.
 
 
 ssdeep
@@ -92,6 +97,18 @@ source code for this version of sdhash is available from:
    http://github.com/sdhash/sdhash
 
 sdhash is open source software and is licensed under APLv2.
+
+
+tlsh
+------
+tlsh was written by Jonathan Oliver, Chun Cheng, Yanggui Chen,
+Scott Forman and Jayson Pryde of Trend Micro. Compiled
+libraries built from unmodified tlsh source, version 3.9.1 (641cb4), are
+installed are installed as part of this package. The original
+source code for this version of tlsh is available from:
+   http://github.com/trendmicro/tlsh.git
+
+tlsh is open source software and is licensed under APLv2 and BSDv3.
 
 
 Other Thanks

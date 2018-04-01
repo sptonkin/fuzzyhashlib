@@ -256,7 +256,7 @@ class tlsh(object):
 
     def __del__(self):
         if hasattr(self, "_tlsh") and not self._final:
-            # FIXME: underlying Tlsh class may leak a little? investigate.
+            # TODO: investigate potential small leak in underlying class?
             try:
                 self._tlsh.final()
             except ValueError:

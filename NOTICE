@@ -5,6 +5,7 @@
    software:
    * ssdeep
    * sdhash
+   * tlsh
 
    ssdeep was written by Jesse Kornblum of the ManTech International
    Corporation, with acknowledged contributions by Jason Sherman and
@@ -19,3 +20,11 @@
    installed are installed as part of this package. The original
    source code for this version of sdhash is available from:
       http://github.com/sdhash/sdhash
+
+   tlsh was written by Jonathan Oliver, Chun Cheng, Yanggui Chen,
+   Scott Forman and Jayson Pryde of Trend Micro. Compiled
+   libraries built from unmodified tlsh source, version 3.9.1 (641cb4), are
+   installed are installed as part of this package. The original
+   source code for this version of tlsh is available from:
+      http://github.com/trendmicro/tlsh.git
+
