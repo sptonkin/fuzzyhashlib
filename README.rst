@@ -43,7 +43,7 @@ Example usage in iPython is provided below.
 Change Log
 ==========
 
-Version 0.0.6 - Add support for tlsh:
+Version 0.0.7 - Add support for tlsh:
 
 -  Adds support for tlsh
 
