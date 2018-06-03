@@ -52,10 +52,23 @@ class BaseFuzzyHashTest(unittest.TestCase):
         self.assertEquals(computed, known)
 
     def test_comparisons(self):
+        # Test with .compare() method.
+        self.assertNotEqual(self.h1.hexdigest(), self.h2.hexdigest())
+        self.assertNotEqual(self.h1.compare(self.h2), 100)
+        self.assertEqual(self.h1.compare(self.h2),
+                         self.h2.compare(self.h1),
+                         msg="commutative test failed")
+
+        # Test with subtraction operator.
         self.assertNotEqual(self.h1.hexdigest(), self.h2.hexdigest())
         self.assertNotEqual(self.h1 - self.h2, 100)
         self.assertEqual(self.h1 - self.h2, self.h2 - self.h1,
                          msg="commutative test failed")
+
+        # Test .compare and subtraction are the same.
+        self.assertEqual(self.h1 - self.h2, self.h1.compare(self.h2))
+
+        # Test comparisons with self a score of 100.
         msg = "(%s) comparing self to self did not score 100"
         self.assertEqual(self.h1 - self.h1, 100, msg=msg % self.h1.name)
         self.assertEqual(self.h2 - self.h2, 100, msg=msg % self.h2.name)

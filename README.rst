@@ -39,9 +39,24 @@ Example usage in iPython is provided below.
   AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
   AAAAAAAAAAAAAAA==\n'
 
+  In [4]: # Comparison example, using subtraction operator.
+  
+  In [5]: fuzzyhashlib.ssdeep("ab" * 2048) - fuzzyhashlib.ssdeep("ab" * 2048)
+  Out[5]: 100
+
+  In [6]: # Comparison example, using .compare() method.
+
+  In [7]: fuzzyhashlib.ssdeep("ab" * 2048).compare(fuzzyhashlib.ssdeep("ab" * 2048))
+  Out[7]: 100
+
 
 Change Log
 ==========
+
+Version 0.0.8 - Improved documentation and class interfaces:
+
+- Improve documentation to include examples of how to do comparisons
+- Adds .compare() method to fuzzyhash objects
 
 Version 0.0.7 - Add support for tlsh:
 

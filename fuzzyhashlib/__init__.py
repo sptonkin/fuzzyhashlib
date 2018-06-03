@@ -109,8 +109,11 @@ class ssdeep(object):
         temp._pre_computed_hash = self._pre_computed_hash
         return temp
 
-    def __sub__(self, b):
+    def compare(self, b):
         return libssdeep_wrapper.compare(self.hexdigest(), b.hexdigest())
+
+    def __sub__(self, b):
+        return self.compare(b)
 
     def __eq__(self, b):
         if isinstance(b, ssdeep):
@@ -181,9 +184,12 @@ class sdhash(object):
         """Not supported."""
         raise InvalidOperation("sdhash does not support update()")
 
-    def __sub__(self, b):
+    def compare(self, b):
         score = self._sdbf.compare(b._sdbf, 0)
         return score
+
+    def __sub__(self, b):
+        return self.compare(b)
 
     def __eq__(self, b):
         if isinstance(b, sdhash):
@@ -308,8 +314,11 @@ class tlsh(object):
             raise ValueError("Comparison object must be instance of "
                              "basestring or tlsh")
 
-    def __sub__(self, b):
+    def compare(self, b):
         return 100 - self.diff(b)
+
+    def __sub__(self, b):
+        return self.compare(b)
 
     def __eq__(self, b):
         if isinstance(b, tlsh):
