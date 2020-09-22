@@ -53,6 +53,11 @@ Example usage in iPython is provided below.
 Change Log
 ==========
 
+Version 0.0.9 - Change to correct license (GPL), last Python 2 version:
+
+- Change to correct license for distribution (GPL, using GPLv3+)
+- Final Python 2 version; future versions (if any) will be Python 3 exclusively
+
 Version 0.0.8 - Improved documentation and class interfaces:
 
 - Improve documentation to include examples of how to do comparisons
@@ -84,7 +89,9 @@ Version 0.0.1 - Initial version:
 License and Source Availability
 ===============================
 
-The fuzzyhashlib library and package is licensed under APLv2.
+This library is licensed under the terms of the GNU General Public License 
+as published by the Free Software Foundation; either version 3 of the
+License, or (at your option) any later version.
 
 The information in this section is also provided under fuzzyhashlib's source
 tree under 'NOTICE'.

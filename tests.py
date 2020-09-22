@@ -1,6 +1,7 @@
 import unittest
 import os
 import resource
+import base64
 
 import fuzzyhashlib
 
@@ -22,9 +23,9 @@ class BaseFuzzyHashTest(unittest.TestCase):
     @property
     def known_data(self):
         dir_path = os.path.dirname(__file__)
-        data_path = os.path.join(dir_path, "LICENSE")
+        data_path = os.path.join(dir_path, "TESTDATA.b64")
         with open(data_path, "rb") as data_file:
-            return data_file.read()
+            return base64.b64decode(data_file.read())
     
     def setUp(self):
         # Ensure inheriting class specifies the class to test.
