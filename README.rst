@@ -65,20 +65,20 @@ Version 0.0.8 - Improved documentation and class interfaces:
 
 Version 0.0.7 - Add support for tlsh:
 
--  Adds support for tlsh
+- Adds support for tlsh
 
 Version 0.0.6 - Documentation and error handling:
 
--  documentation adds description of behaviour if buf and hash paramters are provided at initialisation
--  sdhash class raises exception if provided buffer is < 512 bytes in size
+- documentation adds description of behaviour if buf and hash paramters are provided at initialisation
+- sdhash class raises exception if provided buffer is < 512 bytes in size
 
 Version 0.0.5 - Imporoved packaging:
 
--  (and the versions in-between) fix packaging so libs install correctly
+- (and the versions in-between) fix packaging so libs install correctly
 
 Version 0.0.2 - 32-bit libraries for linux:
 
--  libraries installed for x86-32 linux too
+- libraries installed for x86-32 linux too
 
 Version 0.0.1 - Initial version:
 
@@ -105,7 +105,8 @@ testing by the Computer Science Department at the University of
 Iowa. Compiled libraries built from unmodified ssdeep source,
 version 2.13, are installed as part of this package. The original
 source code for this version of ssdeep available from:
-   http://downloads.sourceforge.net/project/ssdeep/ssdeep-2.13/ssdeep-2.13.tar.gz
+
+- http://downloads.sourceforge.net/project/ssdeep/ssdeep-2.13/ssdeep-2.13.tar.gz
 
 ssdeep is open source software and is licensed under GPLv2.
 
@@ -116,7 +117,8 @@ sdhash was written by Vassil Roussev and Candice Quates. Compiled
 libraries built from unmodified sdhash source, version 3.4, are
 installed are installed as part of this package. The original
 source code for this version of sdhash is available from:
-   http://github.com/sdhash/sdhash
+
+- http://github.com/sdhash/sdhash
 
 sdhash is open source software and is licensed under APLv2.
 
@@ -128,7 +130,8 @@ Scott Forman and Jayson Pryde of Trend Micro. Compiled
 libraries built from unmodified tlsh source, version 3.9.1 (641cb4), are
 installed are installed as part of this package. The original
 source code for this version of tlsh is available from:
-   http://github.com/trendmicro/tlsh.git
+
+- http://github.com/trendmicro/tlsh.git
 
 tlsh is open source software and is licensed under APLv2 and BSDv3.
 
