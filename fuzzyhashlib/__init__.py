@@ -3,7 +3,6 @@ from . import libssdeep_wrapper
 from . import sdhash_wrapper
 from . import tlsh_wrapper
 
-
 """Wrapper for various fuzzy hashing libraries which attempts to be as similar
 in interface to hashlib as possible.
 
@@ -27,15 +26,15 @@ class InvalidOperation(Exception):
 class ssdeep(object):
     """A ssdeep represents ssdeep's computed fuzzy hash of a string of
     information.
-    
-    ssdeep objects can be created either with a buffer or with a 
+
+    ssdeep objects can be created either with a buffer or with a
     previously computed hexdigest, although it should be noted that
     objects created with a previously computed hash cannot be updated
     with calls to their .update() method. Doing so will result in an
     InvalidOperation exception.
 
     Methods:
-    
+
     update() -- updates the current digest with an additional string
     hexdigest() -- return the current digest as a string of hex digits
     copy() -  returns a copy of the current hash object
@@ -44,9 +43,9 @@ class ssdeep(object):
 
     name -- the name of the algorithm being used (ie. "ssdeep")
     digest_size -- the maximum size in bytes
-    
+
     Operators:
-        
+
     __sub__ -- instances can have hashes compared with subtraction (-)
     __eq__ -- instances can be tested for hash equivalency (==)"""
 
@@ -57,7 +56,7 @@ class ssdeep(object):
         """Initialises a ssdeep object. Can be initialised with either a
         a buffer through the use of the keyword argument 'buf' or a
         previously computed ssdeep hash using the keyword argument ('hash').
-        
+
         Note that only objects initialised using a buffer can be updated.
 
         Note that if both buf and hash parameters are provided on
@@ -74,7 +73,7 @@ class ssdeep(object):
             self._pre_computed_hash = hash
         else:
             raise ValueError("one of buf or hash must be set")
-            
+
     def __del__(self):
         try:
             libssdeep_wrapper.fuzzy_free(self._state)
@@ -128,22 +127,22 @@ class sdhash(object):
     """A sdhash represents sdhash's computed fuzzy hash of a string of
     information.
 
-    sdhash objects can be created either with a buffer or with a 
+    sdhash objects can be created either with a buffer or with a
     previously computed hexdigest. sdhash objects cannot be updated
     with calls to .update() method. Doing so will result in an
     InvalidOperation exception.
 
     Methods:
-    
+
     hexdigest() -- return the current digest as a string of hex digits
     copy() -  returns a copy of the current hash object
 
     Attributes:
 
     name -- the name of the algorithm being used (ie. "sdhash")
-    
+
     Operators:
-        
+
     __sub__ -- instances can have hashes compared with subtraction (-)
     __eq__ -- instances can be tested for hash equivalency (==)"""
 
@@ -169,7 +168,7 @@ class sdhash(object):
 
     def __del__(self):
         if hasattr(self, "_sdbf"):
-            del self._sdbf 
+            del self._sdbf
 
     def hexdigest(self):
         """Return the digest value as a string of hexadecimal digits."""
@@ -249,14 +248,14 @@ class tlsh(object):
         initialisation, buf will be used and hash will be ignored."""
 
         self._buf_len = 0
-	self._final = False
+        self._final = False
         self._tlsh = tlsh_wrapper.Tlsh()
 
         if buf is not None:
             self.update(buf)
         elif hash is not None:
             self._tlsh.fromTlshStr(hash)
-	    self._final = True
+            self._final = True
         else:
             raise ValueError("One of buf or hash must be set.")
 
@@ -293,7 +292,7 @@ class tlsh(object):
         if self._final:
             raise InvalidOperation("Cannot update finalised tlsh")
         else:
-	    self._buf_len += len(buf)
+            self._buf_len += len(buf)
             return self._tlsh.update(buf)
 
     def diff(self, b):
@@ -324,6 +323,6 @@ class tlsh(object):
         if isinstance(b, tlsh):
             return self.hexdigest() == b.hexdigest()
         elif isinstance(b, basestring):
-            return self.hexdigest() ==  b
+            return self.hexdigest() == b
         else:
             return False
